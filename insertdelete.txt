@@ -1,0 +1,171 @@
+1 #include<stdio.h>
+  2 #include<stdlib.h>
+  3 struct Node{
+  4     int data,head;
+  5     struct Node*next;
+  6 };
+  7 struct Node*createNode(int data){
+  8     struct Node*newNode=(struct Node*)malloc(sizeof(struct Node));
+  9     newNode->data=data;
+ 10     newNode->next=NULL;
+ 11     return newNode;
+ 12 }
+ 13 void display(struct Node*head){
+ 14     struct Node*temp=head;
+ 15     if(temp==NULL){
+ 16         printf("List is empty\n");
+ 17         return;
+ 18     }
+ 19     printf("Linked list:");
+ 20     while(temp!=NULL){
+ 21         printf("%d->",temp->data);
+ 22         temp = temp->next;
+ 23     }
+ 24     printf("NULL\n");
+ 25 }
+ 26 void inserAtBeginning(struct Node**head,int data){
+ 27     struct Node*newNode= createNode(data);
+ 28     newNode->next = *head;
+ 29     *head = newNode;
+ 30 }
+ 31 void insertAtEnd(struct Node**head,int data){
+ 32     struct Node*newNode= createNode(data);
+ 33     if(*head == NULL){
+ 34         *head = newNode;
+ 35         return;
+ 36     }
+ 37     struct Node*temp = *head;
+ 38     while(temp->next!=NULL)
+ 39         temp = temp->next;
+ 40     temp->next = newNode;
+ 41 }
+ 42 void insertAtPosition(struct Node**head,int data,int position){
+ 43     if(position<1){
+ 44         printf("Invalid position!\n");
+ 45         return;
+ 46
+ 47     }
+ 48     if(position==1){
+ 49         inserAtBeginning(head,data);
+ 50         return ;
+ 51
+ 52
+ 53     }
+ 54     struct Node*temp=*head;
+ 55     for(int i=1;i<position-1&&temp!=NULL;i++)
+ 56         temp = temp->next;
+ 57     if(temp==NULL){
+ 58         printf("Position out of range!\n");
+ 59         return;
+ 60     }
+ 61     struct Node*newNode = createNode(data);
+ 62     newNode->next = temp->next;
+ 63     temp->next = newNode;
+ 64 }
+ 65 void deleteAtBeggining(struct Node**head){
+  66     if(*head==NULL){
+ 67         printf("List is empty!\n");
+ 68         return;
+ 69     }
+ 70     struct Node*temp = *head;
+ 71     *head =temp->next;
+ 72     free(temp);
+ 73 }
+ 74 void deleteAtEnd(struct Node**head){
+ 75     if(*head ==NULL){
+ 76         printf("List is empty!\n");
+ 77         return;
+ 78     }
+ 79     if((*head)->next ==NULL){
+ 80         free(*head);
+ 81         *head=NULL;
+ 82         return;
+ 83     }
+ 84     struct Node*temp=*head;
+ 85     while(temp->next->next!=NULL)
+ 86         temp =temp->next;
+ 87     free(temp->next);
+ 88     temp->next=NULL;
+ 89 }
+ 90 void deleteAtPosition(struct Node**head,int position){
+ 91     if(*head == NULL){
+ 92         printf("List is empty!\n");
+ 93         return;
+ 94     }
+ 95     if(position<1){
+ 96         printf("Invalid position!\n");
+ 97         return;
+ 98     }
+ 99     struct Node*temp = *head;
+100     if(position ==1){
+101         *head = temp->next;
+102         free(temp);
+103         return;
+104     }
+105     for(int i=1;temp !=NULL&&i<position-1;i++)
+106         temp =temp->next;
+107     if(temp==NULL ||temp->next==NULL){
+108         printf("Position out of range!\n");
+109         return;
+110     }
+111     struct Node*nextNode =temp->next->next;
+112     free(temp->next);
+113     temp->next=nextNode;
+114 }
+115 void freeList(struct Node** head) {
+116     struct Node* temp;
+117
+118     while (*head != NULL) {
+119         temp = *head;
+120         *head = (*head)->next;
+121         free(temp);
+122     }
+123 }
+124 int main(){
+125     struct Node*head=NULL;
+126     int choice,data,pos;
+127     while(1){
+128         printf("\n --Linked List Menu --\n");
+129     printf("1.Insert at Beggining\n2.Insert at End\n3.Insert at position\n 4.Delete at Beggining\n5.Delete at position\n7.Display\n8.Exist\n");
+130     printf("Enter your choice:");
+131     if(scanf("%d",&choice)!=1){
+132         return 0;
+133     }
+134     switch(choice){
+135 case1:
+136         printf("Enter the data:");
+137         scanf("%d",&data);
+138         inserAtBeginning(&head,data);
+139         break;
+140         case 2:
+141         printf("Enter data:");
+142         scanf("%d",&data);
+143         insertAtEnd(&head,data);
+144         break;
+145         case 3:
+146         printf("Enter data and position:");
+147         scanf("%d %d",&data,&pos);
+148         insertAtPosition(&head,data,pos);
+149 break;
+150 case 4:
+151 deleteAtBeggining(&head);
+152 break;
+153 case 5:
+154 deleteAtEnd(&head);
+155 break;
+156 case 6:
+157 printf("Enter position:");
+158 scanf("%d",&pos);
+159 deleteAtPosition(&head,pos);
+160 break;
+161 case 7:
+162 display(head);
+163 break;
+164 case 8:
+165 exit(0);
+166 default:
+167 printf("Invalid choice!\n");
+168     }
+169     }
+170     return 0;
+171 }
