@@ -1,0 +1,77 @@
+  1 #include<stdio.h>
+  2 #include<stdlib.h>
+  3 struct Node{
+  4     int data;
+  5     struct Node*next;
+  6 };
+  7 struct Node*front =NULL;
+  8 struct Node*rear =NULL;
+  9 void enqueue(int value){
+ 10     struct Node*newNode=(struct Node*)malloc(sizeof(struct Node));
+ 11     if (newNode==NULL){
+ 12         printf("Queue overflow\n");
+ 13         return;
+ 14     }
+ 15     newNode->data=value;
+ 16     newNode->next=NULL;
+ 17     if(rear==NULL){
+ 18         front=rear=newNode;
+ 19     }else{
+ 20         rear->next=newNode;
+ 21         rear=newNode;
+ 22     }
+ 23     printf(" enqueued to queue\n");
+ 24 }
+ 25 void dequeue(){
+ 26     if(front==NULL){
+ 27         printf("Queue underflow\n");
+ 28         return;
+ 29     }
+ 30     struct Node*temp=front;
+ 31     printf("%d dequeued from queue\n",front->data);
+ 32     front =front->next;
+ 33     if(front ==NULL)
+ 34         rear=NULL;
+ 35     free(temp);
+ 36 }
+ 37 void display(){
+ 38     if(front==NULL){
+ 39         printf("Queue is empty\n");
+ 40         return;
+ 41     }
+ 42     struct Node*temp=front;
+ 43     printf("Queue elements:");
+ 44     while(temp!=NULL){
+ 45         printf("%d ->",temp->data);
+ 46         temp=temp->next;
+ 47     }
+ 48     printf("NULL\n");
+ 49 }
+ 50 int main(){
+ 51     int choice,value;
+ 52     while(1){
+ 53         printf("\n --Queue using Linked List--\n");
+ 54         printf("1.Enqueue\n2.Dequeue\n3.Display\n4.Exit\n");
+ 55         printf("Enter your choice:");
+ 56         scanf("%d ",&choice);
+ 57         switch(choice){
+ 58             case 1:
+ 59                 printf("Enter value to enqueue:");
+ 60                 scanf("%d",&value);
+ 61                 enqueue (value);
+ 62                 break;
+ 63             case 2:
+ 64                 dequeue();
+ 65                 break;
+  66             case 3:
+ 67                 display();
+ 68                 break;
+ 69             case 4:
+ 70                 exit(0);
+ 71                 break;
+ 72             default:
+ 73                 printf("invalid choice!");
+ 74         }
+ 75         }
+ 76         return 0;
+ 77 }
