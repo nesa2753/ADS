@@ -1,0 +1,159 @@
+  1 #include<stdio.h>
+  2 #include<stdlib.h>
+  3 struct node{
+  4     int data;
+  5     struct node *left,*right;
+  6 };
+  7 struct node* createNode(int value){
+  8 struct node*  newnode;
+  9 newnode=(struct node*)malloc(sizeof(struct node));
+ 10 newnode ->data=value;
+ 11 newnode ->left =NULL;
+ 12 newnode ->right=NULL;
+ 13 return newnode;
+ 14 }
+ 15 //Insertion//
+ 16 struct node *insert(struct node* root,int value){
+ 17     if (root==NULL)
+ 18         return createNode(value);
+ 19
+ 20      if(value <root->data)
+ 21         root -> left =insert(root->left,value);
+ 22     else if(value > root ->data)
+ 23         root->right =insert(root ->right,value);
+ 24     return root;
+ 25 }
+ 26 //preprder traversal//
+ 27 void preorder(struct node* root){
+ 28     if(root !=NULL){
+ 29         printf("%d",root->data);
+ 30         preorder(root ->left);
+ 31         preorder(root ->right);
+ 32     }
+ 33 }
+ 34 // post order//
+ 35 void postorder(struct node* root){
+ 36     if(root !=NULL){
+ 37         postorder(root->left);
+ 38         postorder(root->right);
+ 39         printf("%d",root->data);
+ 40     }
+ 41 }
+ 42 //inorder//
+ 43 void inorder(struct node* root){
+ 44     if (root !=NULL){
+ 45         inorder(root->left);
+ 46         printf("%d",root->data);
+ 47         inorder(root->right);
+ 48     }
+ 49 }
+ 50 //search
+ 51 void search(struct node *root,int key){
+ 52     if(root ==NULL){
+ 53         printf("value not  found\n");
+ 54         return;
+ 55     }
+ 56     if(root ->data==key)
+ 57         printf("value found\n");
+ 58     else if(key <root->data)
+ 59         search(root->left,key);
+ 60     else
+ 61         search(root ->right,key);
+ 62 }
+ 63 //find minimum value//
+ 64 struct node* findMin(struct node *root){
+ 65     while(root->left !=NULL)
+  66         root=root->left;
+ 67     return root;
+ 68 }
+ 69 //deletion//
+ 70 struct node* deleteNode(struct node *root,int key)
+ 71 {
+ 72     if(root==NULL)
+ 73         return root;
+ 74     if(key <root->data)
+ 75        (root->left,key);
+ 76     else if(key>root->data)
+ 77         root ->right =deleteNode(root->right,key);
+ 78     else{
+ 79         if(root->left==NULL){
+ 80             struct node* temp= root->right;
+ 81             free(root);
+ 82             return temp;
+ 83         }
+ 84         else if(root->right==NULL){
+ 85             struct node *temp=root->left;
+ 86             free(root);
+ 87             return temp;
+ 88         }
+ 89         struct node* temp=findMin(root->right);
+ 90         root->data=temp->data;
+ 91         root->right=deleteNode(root->right,temp->data);
+ 92     }
+ 93     return root;
+ 94 }
+ 95 int main(){
+ 96     struct node* root=NULL;
+ 97     int n ,value,choice,key,i;
+ 98     printf("Enter number of nodes: ");
+ 99     scanf("%d",&n);
+100     printf("Enter values: \n");
+101     for (i=0;i<n;i++){
+102         scanf("%d",&value);
+103         root=insert (root,value);
+104     }
+105     do {
+106         printf("\n1.Insertion");
+107         printf("\n2.Search");
+108         printf("\n3.Deletion");
+109         printf("\n4.Preorder traversal");
+110         printf("\n5.postorder traversal");
+111         printf("\n6.inorder traversal");
+112         printf("\n7.Exit");
+113         printf("\n Enter your choice: ");
+114         scanf("%d",&choice);
+115         switch (choice){
+116             case 1:
+117                 printf("Enter value to insert: ");
+118                 scanf("%d",&value);
+119                 root=insert(root,value);
+120                 break;
+121
+122             case 2:
+123
+124                 printf("Enter value to search: ");
+125                 scanf("%d",&key);
+126                 search (root,key);
+127                 break;
+128
+129             case 3:
+130
+131                 printf("Enter value to delete: ");
+132                 scanf("%d",&key);
+133                 root= deleteNode(root,key);
+134                 break;
+135             case 4:
+136                 printf("preorder traversal: ");
+137                 preorder(root);
+138                 printf("\n");
+139                 break;
+140             case 5:
+141                 printf("postorder traversal: ");
+142                 postorder(root);
+143                 printf("\n");
+144                 break;
+145             case 6:
+146                 printf("Inorder traversal: ");
+147                 inorder(root);
+148                 printf("\n");
+149                 break;
+150
+151             case 7:
+152                 printf("Exit");
+153                 break;
+154             default :
+155                 printf("Invalid choice");
+156         }
+157     } while(choice !=7);
+158         return 0;
+159     }
